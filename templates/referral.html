@@ -25,7 +25,7 @@
                     <td>
                         <span class="badge bg-primary">{{ referral.referred.package }}</span>
                     </td>
-                    <td class="fw-bold">₦{{ referral.commission }}</td>
+                    <td class="fw-bold">₦{{ referral.commission | round(2) }}</td>
                     <td>
                         {% if referral.status == "pending" %}
                             <span class="badge bg-warning text-dark">Pending</span>

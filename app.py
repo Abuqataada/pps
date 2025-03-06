@@ -90,7 +90,7 @@ def login():
         else:
             flash("Invalid login credentials", "danger")
 
-    return render_template("login.html")
+    return render_template("login.html", show_sidebar=False)
 
 @app.route("/dashboard")
 @login_required
@@ -101,8 +101,6 @@ def dashboard():
     user = current_user
     user_id = current_user.id  # Assuming you're using Flask-Login
     total_referrals = get_total_referrals(user_id)
-    print(f"Total referrals: {total_referrals}")
-    referral_link = f"{request.host_url}register?referral_code={user.referral_code}"
     # Calculate balance
     user_balance = get_user_balance(user.id)
 

@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", function() {
     if (registerForm) {
         registerForm.addEventListener("submit", function(event) {
             const password = registerForm.querySelector("[name='password']").value;
-            if (password.length < 6) {
-                alert("Password must be at least 6 characters!");
+            if (password.length < 3) {
+                alert("Password must be at least 3 characters!");
                 event.preventDefault();
             }
         });
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleButton = document.getElementById('toggleSidebar');
     const sidebar = document.getElementById('sidebar');
 
-    toggleButton?.addEventListener('click', () => {
+    toggleButton.addEventListener('click', () => {
         sidebar.classList.toggle('collapsed');
     });
 });

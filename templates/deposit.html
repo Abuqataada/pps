@@ -23,7 +23,7 @@
     <hr class="my-4">
 
     <!-- Deposit form -->
-    <br><br><h2>Balance: &#8358;{{ user.deposit }}</h2>
+    <br><br><h2>Balance: &#8358;{{ user.deposit | round(2) }}</h2>
     <div class="deposit-form-container">
         <form class="deposit-form" method="post" action="{{ url_for('start_payment') }}">
             <h2>Deposit Funds</h2>

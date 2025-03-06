@@ -58,6 +58,11 @@ h2 {
     margin-left: 60px;
 }
 
+/* Remove left margin when sidebar is not shown */
+.main-content.no-sidebar {
+    margin-left: 0;
+}
+
 /* Card Styles */
 .card {
     border: none;
