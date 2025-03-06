@@ -7,14 +7,18 @@ from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
 import requests
 import json
-
+import os
 
 
 app = Flask(__name__)
 # Configure SQLite database
-app.config['SECRET_KEY'] = 'hjfhbgvhjgbBGRYJEHJ^%$#^$#^&#$475324373246_#)(**&VHJJDSGF)' #or os.environ.get('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pps.db'  # Change to PostgreSQL if needed
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "for_development")
+# Use PostgreSQL from environment variables
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///pps.db")
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pps.db'  # Change to PostgreSQL if needed
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Disable debug mode in production
+app.config["DEBUG"] = os.getenv("FLASK_ENV", "production") == "development"
 PAYSTACK_SECRET_KEY = 'sk_test_d7311cf7d33bae105a57562e4b91fc2fd47bbb16'
 
 login_manager = LoginManager(app)
@@ -446,4 +450,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
         seed_packages()
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
