@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Deposit{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- Welcome Message -->
+    <h1>Welcome to PPS</h1>
+    <h2>Hi, {{ user.name }}!</h2>
+
+    <!-- Referral Code Display -->
+    <p>Your Referral Code:</p>
+    <p>
+        <a href="{{ request.host_url }}register?referral_code={{ user.referral_code }}" class="text-primary">
+            {{ request.host_url }}register?referral_code={{ user.referral_code }}
+        </a>        
+    </p>
+
+    <!-- Copy Referral Link Button -->
+    <button class="btn btn-outline-primary" onclick="copyReferralLink('{{ user.referral_code }}')">
+        Copy Referral Link
+    </button>
+
+    <hr class="my-4">
+
+    <!-- Deposit form -->
+    <br><br><h2>Balance: &#8358;{{ user.deposit }}</h2>
+    <div class="deposit-form-container">
+        <form class="deposit-form" method="post" action="{{ url_for('start_payment') }}">
+            <h2>Deposit Funds</h2>
+            <div class="form-group">
+                <input type="number" name="amount" class="form-control" placeholder="Enter Amount (NGN)" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="form-control btn btn-primary submit px-3">Deposit</button>
+            </div>
+        </form>
+    </div>
+    
+    <br><br><hr>
+    <h3>Deposit History:</h3>
+</div>
+{% endblock %}

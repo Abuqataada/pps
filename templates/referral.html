@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}My Referrals{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">My Referrals</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Referred User</th>
+                    <th>Package</th>
+                    <th>Commission (₦)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for referral in referrals %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ referral.referred.name }}</td>
+                    <td>
+                        <span class="badge bg-primary">{{ referral.referred.package }}</span>
+                    </td>
+                    <td class="fw-bold">₦{{ referral.commission }}</td>
+                    <td>
+                        {% if referral.status == "pending" %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% elif referral.status == "paid" %}
+                            <span class="badge bg-success">Paid</span>
+                        {% else %}
+                            <span class="badge bg-danger">Failed</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    /* Responsive Table */
+    .table-responsive {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .badge {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+    }
+
+    @media (max-width: 768px) {
+        th, td {
+            font-size: 14px;
+            padding: 8px;
+        }
+    }
+</style>
+
+{% endblock %}

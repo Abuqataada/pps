@@ -1,0 +1,36 @@
+<div id="sidebar" class="sidebar">
+    <div class="sidebar-header text-center py-3">
+        <button id="toggleSidebar" class="btn btn-outline-secondary w-100 mt-3">X</button>
+    </div>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('dashboard') }}">
+                <i class="bi bi-house"></i> <span class="sidebar-text">Home</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('referral') }}">
+                <i class="bi bi-people"></i> <span class="sidebar-text">Referrals</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('earnings') }}">
+                <i class="bi bi-cash-stack"></i> <span class="sidebar-text">Earnings</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('deposit') }}">
+                <i class="bi bi-arrow-down"></i> <span class="sidebar-text">Deposit</span>
+            </a>
+        </li><li class="nav-item">
+            <a class="nav-link" href="{{ url_for('withdraw') }}">
+                <i class="bi bi-cash-coin"></i> <span class="sidebar-text">Withdraw</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">
+                <i class="bi bi-box-arrow-right"></i> <span class="sidebar-text">Logout</span>
+            </a>
+        </li>
+    </ul>
+</div>

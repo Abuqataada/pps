@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Deposit{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- Welcome Message -->
+    <h1>Welcome to PPS</h1>
+    <h2>Hi, {{ user.name }}!</h2>
+
+    <!-- Referral Code Display -->
+    <p>Your Referral Code:</p>
+    <p>
+        <a href="{{ request.host_url }}register?referral_code={{ user.referral_code }}" class="text-primary">
+            {{ request.host_url }}register?referral_code={{ user.referral_code }}
+        </a>        
+    </p>
+
+    <!-- Copy Referral Link Button -->
+    <button class="btn btn-outline-primary" onclick="copyReferralLink('{{ user.referral_code }}')">
+        Copy Referral Link
+    </button>
+
+    <hr class="my-4">
+
+    <!-- Withdrawal form -->
+    <br><br><h2>Balance: &#8358;{{ user.deposit }}</h2>
+
+    <!-- Flash message div -->
+	<div>
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<div class="flash {{ category }}">{{ message }}</div>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+	</div>
+
+    <div class="withdrawal-form-container">
+        <form id="withdrawalForm" class="deposit-form" method="post" action="#">
+            <h2>Upload bank details:</h2>
+            <div id="errorMessage" style="display: none; color: red; margin-bottom: 10px;"></div>
+            <div class="form-group">
+                <input id="bankNameInput" type="text" name="bank_name" class="form-control" placeholder="Enter Bank Name" required>
+            </div>
+            <div class="form-group">
+                <input id="accountNumberInput" type="number" name="account_number" class="form-control" placeholder="Enter Account Number" required>
+            </div>
+            <div class="form-group">
+                <input id="accountNameInput" type="text" name="account_name" class="form-control" placeholder="Enter Account Name" required>
+            </div>
+            <div class="form-group">
+                <button id="saveButton" type="submit" class="form-control btn btn-primary submit px-3">Save</button>
+            </div>
+        </form>
+        <!-- Button to open the modal -->
+        <button id="editButton" class="btn btn-secondary" style="display: none; margin-bottom: 5px;">Edit Bank Details</button>
+        <button id="removeButton" class="btn btn-secondary" style="display: none;">Remove Bank Details</button>
+    </div>
+    <input type="hidden" id="userId" value="{{ user.id }}">
+            
+
+    <small id="tooltip" class="form-text text-muted" style="display: none;">
+        You already have bank details saved. Click "Edit Bank Details" to modify them.
+    </small>
+            
+            
+            
+            
+
+            
+            
+
+
+    <h2>Withdrawal:</h2>
+    <div class="deposit-form-container">
+        <form class="deposit-form" method="post" action="#">
+            <div class="form-group">
+                <input type="number" name="amount" class="form-control" placeholder="Enter Amount (NGN)" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="form-control btn btn-primary submit px-3">Withdraw</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
