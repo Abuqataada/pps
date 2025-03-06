@@ -19,7 +19,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///pps
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Disable debug mode in production
 app.config["DEBUG"] = os.getenv("FLASK_ENV", "production") == "development"
-PAYSTACK_SECRET_KEY = 'sk_test_d7311cf7d33bae105a57562e4b91fc2fd47bbb16'
+PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "sk_test_d7311cf7d33bae105a57562e4b91fc2fd47bbb16")
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
