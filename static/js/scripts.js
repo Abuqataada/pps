@@ -20,7 +20,9 @@ function copyReferralLink(referralCode) {
         .catch(err => alert("Failed to copy link: " + err));
 }
 
-// Toggle sidebar visibility
+
+
+// Toggle sidebar visibility (for desktop)
 document.addEventListener('DOMContentLoaded', () => {
     const toggleButton = document.getElementById('toggleSidebar');
     const sidebar = document.getElementById('sidebar');

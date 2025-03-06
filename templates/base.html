@@ -10,10 +10,35 @@
 </head>
 <body>
 
-    {% if show_sidebar %}
-        {% include 'partials/sidebar.html' %}
-    {% endif %}
+    <!-- Offcanvas Sidebar for Mobile -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasSidebarLabel">Menu</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            {% include 'partials/sidebar.html' %}
+        </div>
+    </div>
 
+    <!-- Mobile Navbar with Toggle Button (visible on small screens) -->
+    <nav class="navbar navbar-light bg-light d-md-none">
+        <div class="container-fluid">
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
+                <i class="bi bi-list"></i>
+            </button>
+            <span class="navbar-brand mb-0 h1">My App</span>
+        </div>
+    </nav>
+
+    <!-- Desktop Sidebar (visible on medium and larger screens) -->
+    <div class="d-none d-md-block">
+        {% if show_sidebar %}
+            {% include 'partials/sidebar.html' %}
+        {% endif %}
+    </div>
+
+    <!-- Main Content -->
     <div class="main-content">
         {% block content %}{% endblock %}
     </div>

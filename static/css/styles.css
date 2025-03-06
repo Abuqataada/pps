@@ -67,3 +67,16 @@ h2 {
 .card .card-body {
     padding: 20px;
 }
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100%;
+        position: static;
+        min-height: auto;
+        padding: 10px 0;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+}
