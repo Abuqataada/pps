@@ -14,7 +14,7 @@ app = Flask(__name__)
 # Configure SQLite database
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "for_development")
 # Use PostgreSQL from environment variables
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///pps.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URI", "sqlite:///pps.db")
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pps.db'  # Change to PostgreSQL if needed
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Disable debug mode in production
