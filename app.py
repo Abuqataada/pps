@@ -78,6 +78,10 @@ def register():
 
 @app.route("/", methods=["GET", "POST"])
 def login():
+    with app.app_context():
+        db.create_all()
+        seed_packages()
+        
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
