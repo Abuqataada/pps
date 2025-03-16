@@ -21,7 +21,6 @@ class Package(db.Model):
     def __repr__(self):
         return f"<Package {self.name} - {self.category}>"
 
-
 class AccountDetails(db.Model):
     __tablename__ = 'account_details'
 
@@ -42,6 +41,8 @@ class Transaction(db.Model):
     amount = db.Column(db.Float, nullable=False)
     type = db.Column(db.String(15), nullable=False)  # 'deposit' or 'withdrawal'
     timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    
+    user = db.relationship('User', backref=db.backref('transactions', lazy=True))
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -52,6 +53,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
     username = db.Column(db.String(100), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)  # Admin flag
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     package_id = db.Column(db.Integer, db.ForeignKey('packages.id'))
     referrer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
@@ -67,12 +69,22 @@ class User(db.Model, UserMixin):
 
 
     def can_refer(self, referred_package):
-        # Users can only refer packages within their current category
-        return referred_package.category == self.package.category
+        """
+        Users can refer:
+        1. Packages within their category
+        2. Packages with a lower level
+        """
+        if not self.package:  # Ensure the user has a package
+            return False
+        
+        return (
+            referred_package.category == self.package.category 
+            or referred_package.level < self.package.level
+        )
+
 
     def __repr__(self):
         return f"<User {self.name} - Package: {self.package.name}>"
-
 
 # Referral model
 class Referral(db.Model):
@@ -91,7 +103,6 @@ class Referral(db.Model):
     def __repr__(self):
         return f"<Referral: Referrer={self.referrer_id}, Referred={self.referred_id}, Commission={self.commission}>"
 
-
 class CommissionConfig(db.Model):
     __tablename__ = 'commission_config'
 
@@ -102,7 +113,18 @@ class CommissionConfig(db.Model):
     def __repr__(self):
         return f"<CommissionConfig {self.category} - {self.rate}>"
 
+class WithdrawalRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('withdrawal_requests', lazy=True))
+    amount = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(20), default='pending')  # 'pending', 'approved', 'rejected'
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, onupdate=datetime.now(timezone.utc))
 
+    def __repr__(self):
+        return f"<WithdrawalRequest {self.id} - {self.status}>"
+    
 def seed_packages():
     packages = [
         ("N500", 500, "Bronze", 1),

@@ -1,0 +1,11 @@
+.flash {
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    position: relative;
+    transition: opacity 0.5s ease-out;
+}
+.flash.success { background-color: #d4edda; color: #155724; }
+.flash.danger { background-color: #f8d7da; color: #721c24; }
+.flash.info { background-color: #d1ecf1; color: #0c5460; }

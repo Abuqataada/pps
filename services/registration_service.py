@@ -3,6 +3,7 @@ import string
 from sqlalchemy.exc import IntegrityError
 from models import db, User, Package, CommissionConfig, Referral
 from datetime import datetime, timezone
+from flask import flash
 
 
 
@@ -18,7 +19,11 @@ def calculate_commission(referrer: User, referred: User) -> float:
     # Ensure referred user has a valid package
     if not referred.package:
         return 0.0
-    
+
+    # Check if there is a valid referrer
+    if not referrer:
+        return 0.0  # No commission if there is no referrer
+
     # Check if the referrer can refer this package
     if not referrer.can_refer(referred.package):
         return 0.0
@@ -27,9 +32,8 @@ def calculate_commission(referrer: User, referred: User) -> float:
     commission_config = CommissionConfig.query.filter_by(category=referred.package.category).first()
     if not commission_config:
         return 0.0
-    
+
     commission = referred.package.amount * commission_config.rate
-    print("Commission: ", commission)
     referrer.income += commission
     db.session.commit()
     return commission

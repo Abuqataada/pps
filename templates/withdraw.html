@@ -1,43 +1,19 @@
 {% extends "base.html" %}
-{% block title %}Deposit{% endblock %}
+{% block title %}Withdraw{% endblock %}
 
 {% block content %}
 <div class="container-fluid mt-4">
     <!-- Welcome Message -->
-    <h1>Welcome to PPS</h1>
+    <h1>Welcome to PSS</h1>
     <h2>Hi, {{ user.name }}!</h2>
-
-    <!-- Referral Code Display -->
-    <p>Your Referral Code:</p>
-    <p>
-        <a href="{{ request.host_url }}register?referral_code={{ user.referral_code }}" class="text-primary">
-            {{ request.host_url }}register?referral_code={{ user.referral_code }}
-        </a>        
-    </p>
-
-    <!-- Copy Referral Link Button -->
-    <button class="btn btn-outline-primary" onclick="copyReferralLink('{{ user.referral_code }}')">
-        Copy Referral Link
-    </button>
 
     <hr class="my-4">
 
     <!-- Withdrawal form -->
     <br><br><h2>Balance: &#8358;{{ user.deposit }}</h2>
 
-    <!-- Flash message div -->
-	<div>
-		{% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-				{% for category, message in messages %}
-					<div class="flash {{ category }}">{{ message }}</div>
-				{% endfor %}
-			{% endif %}
-		{% endwith %}
-	</div>
-
     <div class="withdrawal-form-container">
-        <form id="withdrawalForm" class="deposit-form" method="post" action="#">
+        <form id="withdrawalForm" class="deposit-form" method="POST" action="/save-bank-details">
             <h2>Upload bank details:</h2>
             <div id="errorMessage" style="display: none; color: red; margin-bottom: 10px;"></div>
             <div class="form-group">
@@ -74,14 +50,75 @@
 
     <h2>Withdrawal:</h2>
     <div class="deposit-form-container">
-        <form class="deposit-form" method="post" action="#">
+        <form class="deposit-form" method="post" action="/request-withdraw">
             <div class="form-group">
                 <input type="number" name="amount" class="form-control" placeholder="Enter Amount (NGN)" required>
             </div>
             <div class="form-group">
-                <button type="submit" class="form-control btn btn-primary submit px-3">Withdraw</button>
+                <button type="submit" class="form-control btn btn-primary submit px-3">Request Withdrawal</button>
             </div>
         </form>
+    </div><br>
+
+    <!-- Referral Code Display -->
+    <p>Your Referral Code:</p>
+    <p>
+        <a href="{{ request.host_url }}register?referral_code={{ user.referral_code }}" class="text-primary">
+            {{ request.host_url }}register?referral_code={{ user.referral_code }}
+        </a>        
+    </p>
+
+    <!-- Copy Referral Link Button -->
+    <button class="btn btn-outline-primary" onclick="copyReferralLink('{{ user.referral_code }}')">
+        Copy Referral Link
+    </button>
+
+
+
+    <!-- The edit bank Modal -->
+    <div id="editModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Bank Details</h2>
+            <form id="editForm" method="post" action="/update-bank-details">
+                <div class="form-group">
+                    <label for="bankNameInput">Bank Name:</label>
+                    <input id="mbankNameInput" type="text" name="bank_name" class="form-control" placeholder="Enter Bank Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="accountNumberInput">Account Number:</label>
+                    <input id="maccountNumberInput" type="text" name="account_number" class="form-control" placeholder="Enter Account Number" required>
+                </div>
+                <div class="form-group">
+                    <label for="accountNameInput">Account Name:</label>
+                    <input id="maccountNameInput" type="text" name="account_name" class="form-control" placeholder="Enter Account Name" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- Remove Bank Details Modal -->
+    <div id="removeBankModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Remove Bank Details</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to remove your bank details? Bank details are required for withdrawal!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="confirmRemoveButton" class="btn btn-danger">Remove</button>
+                    <button type="button" id="cancelRemoveBank" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>

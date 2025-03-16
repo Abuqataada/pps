@@ -4,23 +4,28 @@
 {% block content %}
 <div class="container-fluid mt-4">
     <!-- Welcome Message -->
-    <h1>Welcome to PPS</h1>
+    <h1>Welcome to PSS</h1>
     <h2>Hi, {{ user.name }}!</h2>
 
-    <!-- Referral Code Display -->
-    <p>Your Referral Code:</p>
-    <p>
-        <a href="{{ request.host_url }}register?referral_code={{ user.referral_code }}" class="text-primary">
-            {{ request.host_url }}register?referral_code={{ user.referral_code }}
-        </a>
-    </p>
-
-    <!-- Copy Referral Link Button -->
-    <button class="btn btn-outline-primary" onclick="copyReferralLink('{{ user.referral_code }}')">
-        Copy Referral Link
-    </button>
-
-    <hr class="my-4">
+    <h3>Your Package:</h3>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Package Name</th>
+                <th>Amount (₦)</th>
+                <th>Category</th>
+                <th>Level</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ user.package.name }}</td>
+                <td>{{ "{:,.0f}".format(user.package.amount) }}</td>
+                <td>{{ user.package.category }}</td>
+                <td>{{ user.package.level }}</td>
+            </tr>
+        </tbody>
+    </table>    
 
     <!-- Dashboard Cards -->
     <div class="row">
@@ -78,5 +83,21 @@
             </div>
         </div>
     </div>
+    <hr class="my-4">
+
+    <!-- Referral Code Display -->
+    <p>Your Referral Code:</p>
+    <p>
+        <a href="{{ request.host_url }}register?referral_code={{ user.referral_code }}" class="text-primary">
+            {{ request.host_url }}register?referral_code={{ user.referral_code }}
+        </a>
+    </p>
+
+    <!-- Copy Referral Link Button -->
+    <button class="btn btn-outline-primary" onclick="copyReferralLink('{{ user.referral_code }}')">
+        Copy Referral Link
+    </button>
+
+    <hr class="my-4">
 </div>
 {% endblock %}

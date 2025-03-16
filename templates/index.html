@@ -1,0 +1,98 @@
+{% extends "index_base.html" %}
+
+{% block title %}PSS | Home{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">PSS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#plans">Plans</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('plans') }}">Plans</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<header id="home" class="hero">
+    <div class="container text-center text-white">
+        <h1 class="display-4">Welcome to PSS</h1>
+        <p class="lead">A smart way to earn with our referral-based subscription system.</p>
+        <a href="#plans" class="btn btn-primary btn-lg">View Plans</a>
+    </div>
+</header>
+
+<!-- Plans Section -->
+<section id="plans" class="py-5 text-center">
+    <div class="container">
+        <h2 class="mb-4">Choose Your Plan</h2>
+        <p class="text-muted">Start small or go big—choose a plan that fits your goals.</p>
+
+        <div class="row">
+            {% set popular_plans = [500, 5000, 50000, 500000, 5000000, 50000000] %}
+            {% for plan in popular_plans %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card border-0 shadow-lg plan-card bg-dark text-white">
+                    <div class="card-body">
+                        <h4 class="card-title">₦{{ "{:,.0f}".format(plan) }}</h4>
+                        <p style="color: white;">Earn higher commissions with this plan.</p>
+                        <a href="{{ url_for('login', next=url_for('deposit', amount=plan)) }}" class="btn btn-warning">Subscribe Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            {% endfor %}
+        </div>
+
+        <!-- "See More Plans" Button -->
+        <div class="mt-4">
+            <a href="{{ url_for('plans') }}" class="btn btn-outline-primary">See All Plans</a>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="bg-light py-5">
+    <div class="container text-center">
+        <h2>About Us</h2>
+        <p>
+            <div class="about-content">
+                <p>
+                    Imagine receiving a consistent monthly stipend that not only takes care of your bills but also provides financial freedom. 
+                    <strong>Smart investments</strong> have the power to transform lives—some require your active involvement, while others allow your money to work for you.
+                </p>
+                <p>
+                    At <strong>PSS (Private Salary System)</strong>, we believe in making your money work for you. Our platform offers a seamless way to generate income while also rewarding you for sharing opportunities with others. 
+                    Whether it's friends, colleagues, or family, introducing them to PSS unlocks massive earning potential for you.
+                </p>
+                <p class="highlight">
+                    💡 <em>Invest smartly. Earn consistently. Share opportunities.</em>
+                </p>
+                <p>
+                    Join PSS today and start building a future where your finances work for you!
+                </p>
+            </div>
+        </p>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-5">
+    <div class="container text-center">
+        <h2>Contact Us</h2>
+        <p>Email: amirkuje001@gmail.com | Phone: +234 706 685 9293</p>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "index_base.html" %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">PSS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('plans') }}">Plans</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container text-center mt-5">
+    <h2 class="mb-4">Choose a Subscription Plan</h2>
+    <p>Select a plan that best suits you and start earning rewards.</p>
+
+    <div class="row justify-content-center">
+        {% for plan in plans %}
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <h5 class="card-title">₦{{ "{:,.0f}".format(plan.amount) }}</h5>
+                    <p class="card-text">Unlock amazing benefits with this plan.</p>
+                    <a href="{{ url_for('deposit', amount=plan.amount) }}" class="btn btn-primary">Subscribe Now</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

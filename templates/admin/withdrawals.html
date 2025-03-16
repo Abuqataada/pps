@@ -1,0 +1,35 @@
+{% extends "admin_base.html" %}
+{% block title %}Withdrawal Requests{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mt-4">Pending Withdrawal Requests</h1>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in pending_requests %}
+            <tr>
+                <td>{{ request.user.username }}</td>
+                <td>₦{{ request.amount }}</td>
+                <td>{{ request.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td>{{ request.status }}</td>
+                <td>
+                    <form action="{{ url_for('update_withdrawal', request_id=request.id) }}" method="post">
+                        <button type="submit" name="action" value="approve" class="btn btn-success btn-sm">Approve</button>
+                        <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

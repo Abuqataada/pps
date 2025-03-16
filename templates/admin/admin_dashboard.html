@@ -1,0 +1,197 @@
+{% extends "admin_base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <h1 class="mt-4">Admin Dashboard</h1>
+
+                <!-- Dashboard Cards -->
+                <div class="row mt-4">
+                    <div class="col-md-4 col-sm-6 mb-3">
+                        <div class="card text-white bg-primary shadow">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Total Users</h5>
+                                    <p class="card-text fs-4">{{ total_users | default(0) }}</p>
+                                </div>
+                                <i class="fas fa-users fa-3x"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 mb-3">
+                        <div class="card text-white bg-success shadow">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Total Referrals</h5>
+                                    <p class="card-text fs-4">{{ total_referrals | default(0) }}</p>
+                                </div>
+                                <i class="fas fa-user-plus fa-3x"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 mb-3">
+                        <div class="card text-white bg-warning shadow">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Total Earnings</h5>
+                                    <p class="card-text fs-4">₦{{ total_earnings | default(0) | round(2) }}</p>
+                                </div>
+                                <i class="fas fa-wallet fa-3x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Breakdown Section -->
+                <h3 class="mt-4">Earnings Breakdown</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card text-white bg-info mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Income</h5>
+                                <p class="card-text">₦{{ total_income | round(2) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card text-white bg-danger mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Commission</h5>
+                                <p class="card-text">₦{{ total_commission | round(2) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="mt-4">Earnings Breakdown (Chart)</h3>
+                <canvas id="earningsChart" width="400" height="200"></canvas>
+
+                <h3 class="mt-4">User Growth (Chart)</h3>
+                <canvas id="userGrowthChart" width="400" height="200"></canvas>
+
+                <script>
+                    // Earnings Breakdown Chart (Income vs. Commission)
+                    var earningsCtx = document.getElementById('earningsChart').getContext('2d');
+                    var earningsChart = new Chart(earningsCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Income', 'Commission'],
+                            datasets: [{
+                                label: 'Earnings Breakdown (₦)',
+                                data: [{{ total_income }}, {{ total_commission }}],
+                                backgroundColor: ['#36A2EB', '#FF6384'],
+                                borderColor: ['#2980B9', '#C0392B'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: { beginAtZero: true }
+                            }
+                        }
+                    });
+
+                    // User Growth Chart (Last 7 Days)
+                    var userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
+                    var userGrowthChart = new Chart(userGrowthCtx, {
+                        type: 'line',
+                        data: {
+                            labels: {{ user_growth_dates | tojson }},
+                            datasets: [{
+                                label: 'New Users',
+                                data: {{ user_growth_counts | tojson }},
+                                borderColor: '#2ECC71',
+                                backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: { beginAtZero: true }
+                            }
+                        }
+                    });
+                </script>
+
+
+                <!-- Recent Referrals -->
+                <h3 class="mt-4">Recent Referrals</h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>User</th>
+                                <th>Referred User</th>
+                                <th>Package</th>
+                                <th>Commission Earned</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for referral in recent_referrals %}
+                            <tr>
+                                <td>{{ referral.referrer_name }}</td>
+                                <td>{{ referral.referred_name }}</td>
+                                <td>{{ referral.package }}</td>
+                                <td>₦{{ referral.commission | round(2) }}</td>
+                                <td>{{ referral.date.strftime('%Y-%m-%d %H:%M') if referral.date else 'N/A' }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center">No recent referrals</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Recent Deposits and Withdrawals -->
+                <h3 class="mt-4">Recent Deposits</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for deposit in recent_deposits %}
+                        <tr>
+                            <td>{{ deposit.user.username }}</td>
+                            <td>₦{{ deposit.amount }}</td>
+                            <td>{{ deposit.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <h3 class="mt-4">Recent Withdrawals</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for withdrawal in recent_withdrawals %}
+                        <tr>
+                            <td>{{ withdrawal.user.username }}</td>
+                            <td>₦{{ withdrawal.amount }}</td>
+                            <td>{{ withdrawal.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </main>
+        </div>
+    </div>
+{% endblock %}
