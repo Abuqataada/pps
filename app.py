@@ -209,13 +209,13 @@ def admin_dashboard():
     total_referrals = Referral.query.count()  # Count of total referrals
 
     # Calculate total earnings (assuming User has an 'earnings' field)
-    total_earnings = db.session.query(func.sum(User.earnings)).scalar() or 0
+    total_withdrawals = db.session.query(db.func.sum(Transaction.amount)).filter(Transaction.type == 'withdrawal').scalar() or 0
 
-    # Fetch recent referrals (assuming Referral has referrer_name, referred_name, package, commission, date)
+    # Fetch recent referrals
     recent_referrals = Referral.query.order_by(Referral.created_at.desc()).limit(10).all()
     
     # Calculate total earnings
-    total_income = db.session.query(db.func.sum(User.income)).scalar() or 0
+    total_income = db.session.query(db.func.sum(User.deposit)).scalar() or 0
     total_commission = db.session.query(db.func.sum(Referral.commission)).scalar() or 0
     
     # Get user growth data for the past 7 days
@@ -239,7 +239,7 @@ def admin_dashboard():
         users=users,
         total_users=total_users,
         total_referrals=total_referrals,
-        total_earnings=total_earnings,
+        total_withdrawals=total_withdrawals,
         recent_referrals=recent_referrals,
         total_income=total_income,
         total_commission=total_commission,
