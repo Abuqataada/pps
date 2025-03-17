@@ -615,31 +615,6 @@ def logout():
 
 
 
-#######################
-#######################
-# Number of referrals
-#######################
-#######################
-def get_total_referrals(user_id):
-    # Count how many referrals this user made
-    total_referrals = Referral.query.filter_by(referrer_id=user_id).count()
-    return total_referrals
-
-#######################
-#######################
-# Getting Balance
-#######################
-#######################
-def get_user_balance(user_id):
-    # Calculate deposits
-    deposits = db.session.query(func.sum(Transaction.amount)).filter_by(user_id=user_id, type='deposit').scalar() or 0
-    
-    # Calculate withdrawals
-    withdrawals = db.session.query(func.sum(Transaction.amount)).filter_by(user_id=user_id, type='withdrawal').scalar() or 0
-    
-    # Calculate balance
-    balance = deposits - withdrawals
-    return balance
 
 ##############################################################################
 #################################### UTILITIES ###############################
@@ -746,6 +721,33 @@ def remove_bank_details():
         flash(f"Error removing bank details: {e}", "danger")
         return redirect(url_for('withdraw_page')), 404
 
+#######################
+#######################
+# Number of referrals
+#######################
+#######################
+def get_total_referrals(user_id):
+    # Count how many referrals this user made
+    total_referrals = Referral.query.filter_by(referrer_id=user_id).count()
+    return total_referrals
+
+#######################
+#######################
+# Getting Balance
+#######################
+#######################
+def get_user_balance(user_id):
+    # Calculate deposits
+    deposits = db.session.query(func.sum(Transaction.amount)).filter_by(user_id=user_id, type='deposit').scalar() or 0
+    
+    # Calculate withdrawals
+    withdrawals = db.session.query(func.sum(Transaction.amount)).filter_by(user_id=user_id, type='withdrawal').scalar() or 0
+    
+    # Calculate balance
+    balance = deposits - withdrawals
+    return balance
+
+
 
 
 
@@ -767,7 +769,4 @@ def remove_bank_details():
 
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        seed_packages()
     app.run(host="0.0.0.0", port=5000, debug=True)

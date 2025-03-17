@@ -2,10 +2,22 @@ from models import db, User
 from app import app
 from werkzeug.security import generate_password_hash
 from sqlalchemy import text
-
 from sqlalchemy import inspect
 
 
+with app.app_context():
+    # Fetch all users
+    email = "amirkuje001@gmail.com"
+    user = User.query.filter_by(email=email).first()
+    #user.deposit = 500.0
+    #db.session.commit()
+    #print("User updated successfully!")
+
+    print(user.id, user.name, user.username, user.email, user.deposit, user.earnings)
+
+
+
+"""
 with app.app_context():
     admin_email = "admin@pss.com"
     admin_password = "admin123"
@@ -27,7 +39,7 @@ with app.app_context():
         db.session.commit()
         print("Admin user added to DataBase!")
     else:
-        print("Admin already exists.")    
+        print("Admin already exists.")"""
     
 
 # Check if the table already exists

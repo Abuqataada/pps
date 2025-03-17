@@ -57,7 +57,7 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     package_id = db.Column(db.Integer, db.ForeignKey('packages.id'))
     referrer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-    earnings = db.Column(db.Float, default=0.0)   # Total income and commission from referral system
+    earnings = db.Column(db.Float, default=0.0)   # Total income from deposit and commission from referral system
     income = db.Column(db.Float, default=0.0)   # Total percentage earn from direct deposit
     referral_code = db.Column(db.String(10), unique=True, nullable=False)
     deposit = db.Column(db.Float, default=0.0)   # Direct fund deposit
