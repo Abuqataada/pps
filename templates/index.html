@@ -41,19 +41,27 @@
 
         <div class="row">
             {% set popular_plans = [500, 5000, 50000, 500000, 5000000, 50000000] %}
+            {% set plan_messages = {
+                500: "Start small, grow big! Begin your journey to financial freedom.",
+                5000: "Boost your earnings effortlessly. More referrals, more rewards!",
+                50000: "Supercharge your income with this high-reward plan!",
+                500000: "Unlock massive commissions and secure your financial future.",
+                5000000: "VIP status unlocked! Enjoy premium benefits and top-tier earnings.",
+                50000000: "Join the exclusive millionaire’s club. The sky is just the beginning!"
+            } %}
+            
             {% for plan in popular_plans %}
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card border-0 shadow-lg plan-card bg-dark text-white">
                     <div class="card-body">
                         <h4 class="card-title">₦{{ "{:,.0f}".format(plan) }}</h4>
-                        <p style="color: white;">Earn higher commissions with this plan.</p>
+                        <p style="color: white;">{{ plan_messages[plan] }}</p>
                         <a href="{{ url_for('login', next=url_for('deposit', amount=plan)) }}" class="btn btn-warning">Subscribe Now</a>
                     </div>
                 </div>
             </div>
-            
             {% endfor %}
-        </div>
+        </div>        
 
         <!-- "See More Plans" Button -->
         <div class="mt-4">
