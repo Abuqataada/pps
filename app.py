@@ -15,6 +15,15 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 migrate = Migrate(app, db)  # Added for database migrations
 # Configure SQLite database
+# Force SQLAlchemy to reconnect when an error occurs
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'pool_pre_ping': True,  # Checks if connection is alive before using it
+    'pool_size': 10,        # Maintain up to 10 connections
+    'max_overflow': 5,      # Allow 5 extra connections in case of high traffic
+    'pool_timeout': 30,     # Wait 30 seconds before raising an error
+    'pool_recycle': 1800    # Recycle connections every 30 minutes
+}
+
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "for_development")
 # Use PostgreSQL from environment variables
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URI", "sqlite:///pps.db")
